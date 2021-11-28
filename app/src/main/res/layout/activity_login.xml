@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     android:layout_margin="10dp"
     android:orientation="vertical"
-    tools:context=".Register">
+    tools:context=".Login">
 
     <EditText
-        android:id="@+id/etRegisterUsername"
+        android:id="@+id/etLoginUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -17,32 +17,24 @@
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/etRegisterPassword"
+        android:id="@+id/etLoginPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword" />
 
-    <EditText
-        android:id="@+id/etRegisterConfirm"
+    <Button
+        android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Confirm Password"
-        android:inputType="textPassword" />
+        android:onClick="loginClick"
+        android:text="Login" />
 
     <Button
-        android:id="@+id/btnRegister"
+        android:id="@+id/btnLoginRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="registerClick"
-        android:text="Register" />
-
-    <Button
-        android:id="@+id/btnRegisterLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="registerClick"
-        android:text="To Login" />
+        android:onClick="loginClick"
+        android:text="To Register" />
 </LinearLayout>
