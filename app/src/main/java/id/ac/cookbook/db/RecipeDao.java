@@ -15,8 +15,8 @@ public interface RecipeDao {
     @Query("select * from recipes where status = 1")
     List<Recipe> getAllPublishedRecipe();
 
-    @Query("select * from recipes where idCreator = :paramID")
-    List<Recipe> getMyRecipe(int paramID);
+    @Query("select * from recipes where usernameCreator = :paramCreator")
+    List<Recipe> getMyRecipe(String paramCreator);
 
     @Query("select * from recipes where id = :paramID")
     List<Recipe> getRecipe(int paramID);

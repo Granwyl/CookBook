@@ -3,13 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/drawable/ic_beverage.xml" value="0.27395833333333336" />
+        <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/drawable/ic_food.xml" value="0.27395833333333336" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/drawable/ic_home.xml" value="0.27395833333333336" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/drawable/ic_login.xml" value="0.27395833333333336" />
+        <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/drawable/ic_side_dish.xml" value="0.27395833333333336" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_add_recipe.xml" value="0.1634963768115942" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_login.xml" value="0.16983695652173914" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_main.xml" value="0.16983695652173914" />
+        <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_my_recipe.xml" value="0.1634963768115942" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_register.xml" value="0.16983695652173914" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_user_home.xml" value="0.16983695652173914" />
+        <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/item_recipe.xml" value="0.264" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/menu/option_anonymous.xml" value="0.2578125" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/menu/option_loginregister.xml" value="0.2578125" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/menu/option_user.xml" value="0.2578125" />

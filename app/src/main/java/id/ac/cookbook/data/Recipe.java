@@ -11,15 +11,24 @@ public class Recipe implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     int id;
     private String nama;
-    private int idCreator;
+    private String usernameCreator;
+
+    public String getUsernameCreator() {
+        return usernameCreator;
+    }
+
+    public void setUsernameCreator(String usernameCreator) {
+        this.usernameCreator = usernameCreator;
+    }
+
     private String kategori; // Food, Beverage, Side Dish
     private String textBahan;
     private String textLangkah;
     private int status; // 0 not published, 1 published
 
-    public Recipe(String nama, int idCreator, String kategori, String textBahan, String textLangkah, int status) {
+    public Recipe(String nama, String usernameCreator, String kategori, String textBahan, String textLangkah, int status) {
         this.nama = nama;
-        this.idCreator = idCreator;
+        this.usernameCreator = usernameCreator;
         this.kategori = kategori;
         this.textBahan = textBahan;
         this.textLangkah = textLangkah;
@@ -29,7 +38,7 @@ public class Recipe implements Parcelable {
     protected Recipe(Parcel in) {
         id = in.readInt();
         nama = in.readString();
-        idCreator = in.readInt();
+        usernameCreator = in.readString();
         kategori = in.readString();
         textBahan = in.readString();
         textLangkah = in.readString();
@@ -62,14 +71,6 @@ public class Recipe implements Parcelable {
 
     public void setNama(String nama) {
         this.nama = nama;
-    }
-
-    public int getIdCreator() {
-        return idCreator;
-    }
-
-    public void setIdCreator(int idCreator) {
-        this.idCreator = idCreator;
     }
 
     public String getKategori() {
@@ -113,7 +114,7 @@ public class Recipe implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
         parcel.writeString(nama);
-        parcel.writeInt(idCreator);
+        parcel.writeString(usernameCreator);
         parcel.writeString(kategori);
         parcel.writeString(textBahan);
         parcel.writeString(textLangkah);

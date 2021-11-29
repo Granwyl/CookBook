@@ -20,6 +20,10 @@ public interface UserDao {
 
     @Query("select * from users where LOWER(username) = LOWER(:paramUsername) and password = :paramPassword")
     List<User> getUsersByUsernamePassword(String paramUsername, String paramPassword);
+
+    @Query("select * from users where id = :paramID")
+    List<User> getUsersById(int paramID);
+
     @Insert
     void insertUser(User newUser);
 

@@ -64,7 +64,7 @@ public class AddRecipeActivity extends AppCompatActivity {
             String bahan = etBahan.getText().toString();
             String langkah = etLangkah.getText().toString();
             String kategori = spinner.getSelectedItem().toString();
-            recipe = new Recipe(nama, user.getId(), kategori, bahan, langkah, 0);
+            recipe = new Recipe(nama, user.getUsername(), kategori, bahan, langkah, 0);
 
             new AddRecipeAsync(recipe,
                     this,

@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra("user")){
             user = getIntent().getParcelableExtra("user");
-            tvWelcome.setText("Welcome, " + user.getUsername());
+            tvWelcome.setText("Welcome, " + user.getUsername() + " id : " + user.getId());
         }
 
     }
@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent toAdd = new Intent(MainActivity.this, AddRecipeActivity.class);
                 toAdd.putExtra("user", user);
                 startActivity(toAdd);
+            }else if (item.getItemId() == R.id.option_my_recipe){
+                Intent toMyRecipe = new Intent(MainActivity.this, MyRecipeActivity.class);
+                toMyRecipe.putExtra("user", user);
+                startActivity(toMyRecipe);
             }
         }else{
             if (item.getItemId() == R.id.option_login){

@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CookBook">
         <activity
+            android:name=".MyRecipeActivity"
+            android:exported="true" />
+        <activity
             android:name=".AddRecipeActivity"
             android:exported="true" />
         <activity
