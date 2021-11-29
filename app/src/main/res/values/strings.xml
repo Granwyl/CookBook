@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CookBook</string>
+
+    <string-array name="kategori">
+        <item>Food</item>
+        <item>Beverage</item>
+        <item>Side Dish</item>
+    </string-array>
 </resources>
