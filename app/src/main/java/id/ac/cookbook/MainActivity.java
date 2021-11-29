@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra("user")){
             user = getIntent().getParcelableExtra("user");
-            tvWelcome.setText("Welcome, " + user.getUsername() + " id : " + user.getId());
+            tvWelcome.setText("Welcome, " + user.getUsername());
         }
 
     }

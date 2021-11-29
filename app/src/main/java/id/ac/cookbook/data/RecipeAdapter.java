@@ -70,7 +70,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         }
 
         void bind(Recipe recipe, User user){
-            tvCreator.setText("created by : " + user.getUsername() + " id Creator : " + recipe.getUsernameCreator());
+            tvCreator.setText("created by : " + user.getUsername());
             tvNama.setText(recipe.getNama());
             if (recipe.getKategori().equalsIgnoreCase("food")){
                 ivLogo.setImageResource(R.drawable.ic_food);
