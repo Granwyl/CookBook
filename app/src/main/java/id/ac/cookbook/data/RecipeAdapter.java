@@ -43,7 +43,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         if (listUser.size() > position){
             user = listUser.get(position);
         }else{
-            user = new User("anonymous", "anonymous");
+            user = new User("anonymousa", "anonymousa");
         }
         holder.bind(recipe, user);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
