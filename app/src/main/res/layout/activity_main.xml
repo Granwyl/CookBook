@@ -8,18 +8,17 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/tvMainTitle"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragContainerMain"
+        android:name="id.ac.cookbook.fragments.HomeFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Home"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
-    <TextView
-        android:id="@+id/tvMainWelcome"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/botNavMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center" />
+        android:layout_weight="0"
+        app:menu="@menu/bot_nav_main_anonymous" />
 </LinearLayout>

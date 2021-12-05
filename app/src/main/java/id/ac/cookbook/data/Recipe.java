@@ -3,24 +3,9 @@ package id.ac.cookbook.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
-@Entity(tableName = "recipes")
 public class Recipe implements Parcelable {
-    @PrimaryKey(autoGenerate = true)
-    int id;
     private String nama;
     private String usernameCreator;
-
-    public String getUsernameCreator() {
-        return usernameCreator;
-    }
-
-    public void setUsernameCreator(String usernameCreator) {
-        this.usernameCreator = usernameCreator;
-    }
-
     private String kategori; // Food, Beverage, Side Dish
     private String textBahan;
     private String textLangkah;
@@ -36,7 +21,6 @@ public class Recipe implements Parcelable {
     }
 
     protected Recipe(Parcel in) {
-        id = in.readInt();
         nama = in.readString();
         usernameCreator = in.readString();
         kategori = in.readString();
@@ -57,12 +41,12 @@ public class Recipe implements Parcelable {
         }
     };
 
-    public int getId() {
-        return id;
+    public String getUsernameCreator() {
+        return usernameCreator;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUsernameCreator(String usernameCreator) {
+        this.usernameCreator = usernameCreator;
     }
 
     public String getNama() {
@@ -112,7 +96,6 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
         parcel.writeString(nama);
         parcel.writeString(usernameCreator);
         parcel.writeString(kategori);

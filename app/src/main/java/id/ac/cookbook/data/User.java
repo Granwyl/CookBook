@@ -3,25 +3,21 @@ package id.ac.cookbook.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
-@Entity(tableName = "users")
 public class User implements Parcelable {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-    private String username;
-    private String password;
+    public String username;
+    public String password;
+    public String email;
 
-    public User(String username, String password) {
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
+        this.email = email;
     }
 
     protected User(Parcel in) {
-        id = in.readInt();
         username = in.readString();
         password = in.readString();
+        email = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -35,14 +31,6 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
@@ -60,6 +48,14 @@ public class User implements Parcelable {
         this.password = password;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -67,8 +63,8 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
         parcel.writeString(username);
         parcel.writeString(password);
+        parcel.writeString(email);
     }
 }

@@ -1,32 +1,45 @@
 package id.ac.cookbook;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.text.TextUtils;
-import android.util.Log;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.lang.ref.WeakReference;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import id.ac.cookbook.data.User;
-import id.ac.cookbook.db.AppDatabase;
+import id.ac.cookbook.volley.DbContract;
+import id.ac.cookbook.volley.VolleyConnection;
 
 public class Register extends AppCompatActivity {
-    EditText etUsername, etPassword, etConfirm;
+    EditText etUsername, etPassword, etConfirm, etEmail;
     User user;
+
+    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +48,9 @@ public class Register extends AppCompatActivity {
         etUsername = findViewById(R.id.etRegisterUsername);
         etPassword = findViewById(R.id.etRegisterPassword);
         etConfirm = findViewById(R.id.etRegisterConfirm);
+        etEmail = findViewById(R.id.etRegisterEmail);
+
+        progressDialog = new ProgressDialog(Register.this);
     }
 
     @Override
@@ -61,80 +77,120 @@ public class Register extends AppCompatActivity {
         }
     }
 
-    void registerUser(){
-        if (TextUtils.isEmpty(etUsername.getText()) ||
-                TextUtils.isEmpty(etPassword.getText()) ||
-                TextUtils.isEmpty(etConfirm.getText())
-        ){
-            Toast.makeText(getApplicationContext(), "Semua field harus diisi!", Toast.LENGTH_SHORT).show();
-        }else{
-            if (etPassword.getText().toString().equals(etConfirm.getText().toString())){
-                user = new User(etUsername.getText().toString(), etPassword.getText().toString());
-                new RegisterAddUserAsync(user,
-                        this,
-                        new RegisterAddUserAsync.RegisterAddUserCallback() {
-                    @Override
-                    public void preExecute() {
+    public void registerUser(){
+        String username = etUsername.getText().toString().trim();
+        String email = etEmail.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+        String confirm = etConfirm.getText().toString().trim();
+        if (username.isEmpty()){
+            etUsername.setError("Username perlu diisi!");
+            etUsername.requestFocus();
+            return;
+        }
 
-                    }
+        if (email.isEmpty()){
+            etEmail.setError("Email perlu diisi!");
+            etEmail.requestFocus();
+            return;
+        }
 
-                    @Override
-                    public void postExecute(String message) {
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            etEmail.setError("Emailnya yang valid dong!");
+            etEmail.requestFocus();
+            return;
+        }
+
+        if (password.isEmpty()){
+            etPassword.setError("Password perlu diisi!");
+            etPassword.requestFocus();
+            return;
+        }
+
+        if (confirm.isEmpty()){
+            etConfirm.setError("Konfirmasi Password perlu diisi!");
+            etConfirm.requestFocus();
+            return;
+        }
+
+        if (!confirm.equals(password)){
+            etConfirm.setError("Konfirmasi tidak sama!");
+            etConfirm.requestFocus();
+            return;
+        }
+
+        createDataToServer(username, password, email);
+    }
+
+    public void createDataToServer(final String username, final String password, final String email){
+        if (checkNetworkConnection()){
+            progressDialog.show();
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, DbContract.SERVER_MASTER_URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+//                        String resp = jsonObject.getString("server_response");
+//                        if (resp.equals("[{\"status\":\"OK\"}]")){
+//                            Toast.makeText(getApplicationContext(), "Register berhasil!", Toast.LENGTH_SHORT).show();
+//                            user = new User(username, password, email);
+//                            Intent toHome = new Intent(Register.this, MainActivity.class);
+//                            toHome.putExtra("user", user);
+//                            startActivity(toHome);
+//                        }else{
+//                            Toast.makeText(getApplicationContext(), resp, Toast.LENGTH_SHORT).show();
+//                        }
+
+                        int code = jsonObject.getInt("code");
+                        String message = jsonObject.getString("message");
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                        if (message.equals("Register Success!")){
+                        if (code == 1){
+                            user = new User(username, password, email);
                             Intent toHome = new Intent(Register.this, MainActivity.class);
                             toHome.putExtra("user", user);
                             startActivity(toHome);
                         }
+                    }catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }).execute();
-            }else{
-                Toast.makeText(getApplicationContext(), "Konfirmasi password tidak sesuai!", Toast.LENGTH_SHORT).show();
-            }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }) {
+                @Nullable
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+//                    params.put("username", username);
+//                    params.put("password", password);
+//                    params.put("email", email);
+
+                    params.put("function", "register");
+                    params.put("username", username);
+                    params.put("password", password);
+                    params.put("email", email);
+                    return params;
+                }
+            };
+
+            VolleyConnection.getInstance(Register.this).addToRequestQueue(stringRequest);
+            
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.cancel();
+                }
+            }, 2000);
+        }else{
+            Toast.makeText(getApplicationContext(), "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
         }
     }
-}
 
-class RegisterAddUserAsync{
-    private final WeakReference<Context> weakContext;
-    private final WeakReference<RegisterAddUserCallback> weakCallback;
-    private User user;
-
-    public RegisterAddUserAsync(User user,
-                                Context context,
-                                RegisterAddUserCallback callback){
-        this.weakContext = new WeakReference<>(context);
-        this.weakCallback = new WeakReference<>(callback);
-        this.user = user;
-    }
-
-    void execute(){
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Handler handler = new Handler(Looper.getMainLooper());
-
-        weakCallback.get().preExecute();
-        executorService.execute( () -> {
-            Context context = weakContext.get();
-            AppDatabase appDatabase = AppDatabase.getAppDatabase(context);
-
-            List<User> resultUsers = appDatabase.userDao().getUsersByUsername(user.getUsername());
-            if (resultUsers.size() == 0){
-                appDatabase.userDao().insertUser(user);
-                handler.post( () -> {
-                    String successMessage = "Register Success!";
-                    weakCallback.get().postExecute(successMessage);
-                });
-            }else {
-                handler.post( () -> {
-                    String successMessage = "Username Taken!";
-                    weakCallback.get().postExecute(successMessage);
-                });
-            }
-        });
-    }
-
-    interface RegisterAddUserCallback {
-        void preExecute();
-        void postExecute(String message);
+    public boolean checkNetworkConnection(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 }

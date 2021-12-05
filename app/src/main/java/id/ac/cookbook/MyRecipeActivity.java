@@ -8,21 +8,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import id.ac.cookbook.data.Recipe;
 import id.ac.cookbook.data.RecipeAdapter;
 import id.ac.cookbook.data.User;
-import id.ac.cookbook.db.AppDatabase;
 
 public class MyRecipeActivity extends AppCompatActivity {
     User user;
@@ -36,35 +30,6 @@ public class MyRecipeActivity extends AppCompatActivity {
 
         rvData = findViewById(R.id.rvMyRecipe);
         context = this;
-
-        if (getIntent().hasExtra("user")){
-            user = getIntent().getParcelableExtra("user");
-            new LoadMyRecipeAsync(user.getUsername(),
-                    context,
-                    new LoadMyRecipeAsync.LoadMyRecipeCallback() {
-                @Override
-                public void preExecute() {
-
-                }
-
-                @Override
-                public void postExecute(List<Recipe> listRecipe) {
-                    new LoadMyRecipeCreatorAsync(listRecipe,
-                            context,
-                            new LoadMyRecipeCreatorAsync.LoadMyRecipeCreatorCallback() {
-                        @Override
-                        public void preExecute() {
-
-                        }
-
-                        @Override
-                        public void postExecute(List<Recipe> listRecipe, ArrayList<User> listUser) {
-                            setUpRecyclerView(listRecipe, listUser);
-                        }
-                    }).execute();
-                }
-            }).execute();
-        }
     }
 
     void setUpRecyclerView(List<Recipe> listRecipe, ArrayList<User> listUser){
@@ -105,88 +70,5 @@ public class MyRecipeActivity extends AppCompatActivity {
             startActivity(toHome);
         }
         return super.onOptionsItemSelected(item);
-    }
-}
-
-class LoadMyRecipeAsync{
-    private final WeakReference<Context> weakContext;
-    private final WeakReference<LoadMyRecipeCallback> weakCallback;
-    private String idCreator;
-
-    LoadMyRecipeAsync(String idCreator,
-                      Context context,
-                      LoadMyRecipeCallback callback){
-        this.weakContext = new WeakReference<>(context);
-        this.weakCallback = new WeakReference<>(callback);
-        this.idCreator = idCreator;
-    }
-
-    void execute(){
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Handler handler = new Handler(Looper.getMainLooper());
-
-        weakCallback.get().preExecute();
-        executorService.execute(() -> {
-            Context context = weakContext.get();
-            AppDatabase appDatabase = AppDatabase.getAppDatabase(context);
-
-            List<Recipe> resultListRecipe;
-
-            resultListRecipe = appDatabase.recipeDao().getMyRecipe(idCreator);
-
-
-            handler.post(() -> {
-                weakCallback.get().postExecute(resultListRecipe);
-            });
-        });
-    }
-
-    interface LoadMyRecipeCallback{
-        void preExecute();
-        void postExecute(List<Recipe> listRecipe);
-    }
-}
-
-class LoadMyRecipeCreatorAsync{
-    private final WeakReference<Context> weakContext;
-    private final WeakReference<LoadMyRecipeCreatorCallback> weakCallback;
-    private List<Recipe> listRecipe;
-
-    LoadMyRecipeCreatorAsync(List<Recipe> listRecipe,
-                             Context context,
-                             LoadMyRecipeCreatorCallback callback){
-        this.weakContext = new WeakReference<>(context);
-        this.weakCallback = new WeakReference<>(callback);
-        this.listRecipe = listRecipe;
-    }
-
-    void execute(){
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Handler handler = new Handler(Looper.getMainLooper());
-
-        weakCallback.get().preExecute();
-        executorService.execute(() -> {
-            Context context = weakContext.get();
-            AppDatabase appDatabase = AppDatabase.getAppDatabase(context);
-
-            List<User> resultListUser;
-            ArrayList<User> listUser = new ArrayList<>();
-
-            for (int i = 0; i < listRecipe.size(); i++){
-                resultListUser = appDatabase.userDao().getUsersByUsername(listRecipe.get(i).getUsernameCreator());
-                if (resultListUser.size() > 0){
-                    listUser.add(resultListUser.get(0));
-                }
-            }
-
-            handler.post(() -> {
-                weakCallback.get().postExecute(listRecipe ,listUser);
-            });
-        });
-    }
-
-    interface LoadMyRecipeCreatorCallback{
-        void preExecute();
-        void postExecute(List<Recipe> listRecipe, ArrayList<User> listUser);
     }
 }

@@ -1,8 +1,4 @@
-package id.ac.cookbook;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+package id.ac.cookbook.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -10,10 +6,16 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.os.Handler;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,49 +32,92 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import id.ac.cookbook.Login;
+import id.ac.cookbook.MainActivity;
+import id.ac.cookbook.R;
+import id.ac.cookbook.Register;
 import id.ac.cookbook.data.User;
 import id.ac.cookbook.volley.DbContract;
 import id.ac.cookbook.volley.VolleyConnection;
 
-public class Login extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link LoginFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class LoginFragment extends Fragment {
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+    // TODO: Rename and change types of parameters
+
     EditText etUsername, etPassword;
+    Button btnLogin, btnRegister;
+    ProgressDialog progressDialog;
     User user;
 
-    ProgressDialog progressDialog;
+    public LoginFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment LoginFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static LoginFragment newInstance() {
+        LoginFragment fragment = new LoginFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        etUsername = findViewById(R.id.etLoginUsername);
-        etPassword = findViewById(R.id.etLoginPassword);
-
-        progressDialog = new ProgressDialog(Login.this);
+        if (getArguments() != null) {
+        }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.option_loginregister, menu);
-        return super.onCreateOptionsMenu(menu);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.option_logreg_home){
-            Intent toHome = new Intent(Login.this, MainActivity.class);
-            startActivity(toHome);
-        }
-        return super.onOptionsItemSelected(item);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        
+        etUsername = view.findViewById(R.id.etFrLoginUsername);
+        etPassword = view.findViewById(R.id.etFrLoginPassword);
+        btnLogin = view.findViewById(R.id.btnFrLogin);
+        btnRegister = view.findViewById(R.id.btnFrLoginRegister);
+
+        progressDialog = new ProgressDialog(getActivity());
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doLogin();
+            }
+        });
+
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toRegister();
+            }
+        });
     }
 
-    public void loginClick(View v){
-        if (v.getId() == R.id.btnLogin){
-            doLogin();
-        }else if (v.getId() == R.id.btnLoginRegister){
-            Intent toRegister = new Intent(Login.this, Register.class);
-            startActivity(toRegister);
-        }
+    void toRegister(){
+        Intent toRegister = new Intent(getActivity(), Register.class);
+        startActivity(toRegister);
     }
 
     public void doLogin(){
@@ -104,7 +149,7 @@ public class Login extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject(response);
                         int code = jsonObject.getInt("code");
                         String message = jsonObject.getString("message");
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                         if (code == 1){ // login user
                             JSONArray jsonArray = jsonObject.getJSONArray("datauser");
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -115,7 +160,7 @@ public class Login extends AppCompatActivity {
                                         userObj.getString("email")
                                 );
                             }
-                            Intent toHome = new Intent(Login.this, MainActivity.class);
+                            Intent toHome = new Intent(getActivity(), MainActivity.class);
                             toHome.putExtra("user", user);
                             startActivity(toHome);
                         }else if (code == 2){ // login admin
@@ -142,7 +187,7 @@ public class Login extends AppCompatActivity {
                 }
             };
 
-            VolleyConnection.getInstance(Login.this).addToRequestQueue(stringRequest);
+            VolleyConnection.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -151,12 +196,12 @@ public class Login extends AppCompatActivity {
                 }
             }, 2000);
         }else{
-            Toast.makeText(getApplicationContext(), "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
         }
     }
 
     public boolean checkNetworkConnection(){
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
     }

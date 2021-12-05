@@ -1,51 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
     android:gravity="center_vertical"
     android:orientation="vertical"
-    tools:context=".Login">
+    tools:context=".fragments.LoginFragment">
 
     <EditText
-        android:id="@+id/etLoginUsername"
+        android:id="@+id/etFrLoginUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="2dp"
         android:ems="10"
         android:hint="Username"
-        android:inputType="textPersonName"
-        android:layout_margin="2dp"/>
+        android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/etLoginPassword"
+        android:id="@+id/etFrLoginPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="2dp"
         android:ems="10"
         android:hint="Password"
-        android:inputType="textPassword"
-        android:layout_margin="2dp"/>
+        android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnFrLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="loginClick"
-        android:text="Login"
-        android:background="@drawable/custom_button"
-        android:textAllCaps="false"
         android:layout_margin="5dp"
+        android:background="@drawable/custom_button"
+        android:onClick="frLoginClick"
+        android:text="Login"
+        android:textAllCaps="false"
         android:textSize="17dp"/>
 
     <Button
-        android:id="@+id/btnLoginRegister"
+        android:id="@+id/btnFrLoginRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="loginClick"
-        android:text="To Register"
-        android:background="@drawable/custom_button"
-        android:textAllCaps="false"
         android:layout_margin="5dp"
+        android:background="@drawable/custom_button"
+        android:onClick="frLoginClick"
+        android:text="To Register"
+        android:textAllCaps="false"
         android:textSize="17dp"/>
 </LinearLayout>
