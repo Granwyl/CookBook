@@ -17,6 +17,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import id.ac.cookbook.data.User;
 import id.ac.cookbook.fragments.HomeFragment;
 import id.ac.cookbook.fragments.LoginFragment;
+import id.ac.cookbook.fragments.MyRecipeFragment;
 
 public class MainActivity extends AppCompatActivity {
     TextView tvWelcome;
@@ -45,13 +46,13 @@ public class MainActivity extends AppCompatActivity {
                 if (getIntent().hasExtra("user")){
                     switch (item.getItemId()){
                         case R.id.bot_nav_user_home:
-                            fragment = HomeFragment.newInstance();
+                            fragment = HomeFragment.newInstance(user);
                             break;
                         case R.id.bot_nav_user_myRecipe:
-                            fragment = HomeFragment.newInstance();
+                            fragment = MyRecipeFragment.newInstance(user);
                             break;
                         default:
-                            fragment = HomeFragment.newInstance();
+                            fragment = HomeFragment.newInstance(user);
                             break;
                     }
                 }else{

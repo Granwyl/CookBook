@@ -22,6 +22,7 @@
         android:id="@+id/etAddRecipeNama"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:ems="10"
         android:hint="Nama Resep"
         android:inputType="textPersonName" />
@@ -30,12 +31,14 @@
         android:id="@+id/spinnerAddRecipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:entries="@array/kategori" />
 
     <EditText
         android:id="@+id/etAddRecipeBahan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:ems="10"
         android:gravity="start|top"
         android:hint="Bahan Resep"
@@ -46,6 +49,7 @@
         android:id="@+id/etAddRecipeLangkah"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:ems="10"
         android:gravity="start|top"
         android:hint="Langkah Resep"
@@ -57,12 +61,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="addRecipeClick"
-        android:text="Add Recipe" />
+        android:text="Add Recipe"
+        android:textAllCaps="false"
+        android:background="@drawable/custom_button"
+        android:textSize="17dp"
+        android:layout_margin="5dp"/>
 
-    <Button
-        android:id="@+id/btnAddRecipeHome"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="addRecipeClick"
-        android:text="Back to Home" />
 </LinearLayout>

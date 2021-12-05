@@ -110,6 +110,7 @@ public class Login extends AppCompatActivity {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject userObj = jsonArray.getJSONObject(i);
                                 user = new User(
+                                        userObj.getInt("id"),
                                         userObj.getString("username"),
                                         userObj.getString("password"),
                                         userObj.getString("email")

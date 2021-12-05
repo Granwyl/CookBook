@@ -4,17 +4,20 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class User implements Parcelable {
+    public int id;
     public String username;
     public String password;
     public String email;
 
-    public User(String username, String password, String email) {
+    public User(int id, String username, String password, String email) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
     }
 
     protected User(Parcel in) {
+        id = in.readInt();
         username = in.readString();
         password = in.readString();
         email = in.readString();
@@ -31,6 +34,14 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
@@ -63,6 +74,7 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
         parcel.writeString(username);
         parcel.writeString(password);
         parcel.writeString(email);

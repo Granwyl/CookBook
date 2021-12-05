@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -144,7 +145,17 @@ public class Register extends AppCompatActivity {
                         String message = jsonObject.getString("message");
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         if (code == 1){
-                            user = new User(username, password, email);
+                            JSONArray jsonArray = jsonObject.getJSONArray("datauser");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject userObj = jsonArray.getJSONObject(i);
+                                user = new User(
+                                        userObj.getInt("id"),
+                                        userObj.getString("username"),
+                                        userObj.getString("password"),
+                                        userObj.getString("email")
+                                );
+                            }
+
                             Intent toHome = new Intent(Register.this, MainActivity.class);
                             toHome.putExtra("user", user);
                             startActivity(toHome);
