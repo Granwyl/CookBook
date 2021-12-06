@@ -17,12 +17,10 @@ import id.ac.cookbook.R;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
     private ArrayList<Recipe> listRecipe;
-    private ArrayList<User> listUser;
     private OnItemClickCallback onItemClickCallback;
 
-    public RecipeAdapter(ArrayList<Recipe> listRecipe, ArrayList<User> listUser) {
+    public RecipeAdapter(ArrayList<Recipe> listRecipe) {
         this.listRecipe = listRecipe;
-        this.listUser = listUser;
     }
 
     public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback){
@@ -39,13 +37,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Recipe recipe = listRecipe.get(position);
-        User user;
-        if (listUser.size() > position){
-            user = listUser.get(position);
-        }else{
-            user = new User(10, "anonymousa", "anonymousa", "anonymousa@gmail.com");
-        }
-        holder.bind(recipe, user);
+        holder.bind(recipe);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,8 +61,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             tvCreator = itemView.findViewById(R.id.tvItemRecipeCreator);
         }
 
-        void bind(Recipe recipe, User user){
-            tvCreator.setText("created by : " + user.getUsername());
+        void bind(Recipe recipe){
+            tvCreator.setText("created by : " + recipe.getUsernameCreator());
             tvNama.setText(recipe.getNama());
             if (recipe.getKategori().equalsIgnoreCase("food")){
                 ivLogo.setImageResource(R.drawable.ic_food);

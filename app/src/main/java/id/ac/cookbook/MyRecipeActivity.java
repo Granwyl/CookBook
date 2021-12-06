@@ -32,14 +32,11 @@ public class MyRecipeActivity extends AppCompatActivity {
         context = this;
     }
 
-    void setUpRecyclerView(List<Recipe> listRecipe, ArrayList<User> listUser){
+    void setUpRecyclerView(ArrayList<Recipe> listRecipe, ArrayList<User> listUser){
         rvData.setLayoutManager(new LinearLayoutManager(this));
         rvData.setHasFixedSize(true);
 
-        ArrayList<Recipe> list = new ArrayList<>();
-        list.addAll(listRecipe);
-
-        recipeAdapter = new RecipeAdapter(list, listUser);
+        recipeAdapter = new RecipeAdapter(listRecipe);
         recipeAdapter.setOnItemClickCallback(new RecipeAdapter.OnItemClickCallback() {
             @Override
             public void onItemClicked(Recipe recipe) {

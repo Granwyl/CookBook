@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Recipe implements Parcelable {
+    private int id;
     private String nama;
     private String usernameCreator;
     private String kategori; // Food, Beverage, Side Dish
@@ -11,7 +12,8 @@ public class Recipe implements Parcelable {
     private String textLangkah;
     private int status; // 0 not published, 1 published
 
-    public Recipe(String nama, String usernameCreator, String kategori, String textBahan, String textLangkah, int status) {
+    public Recipe(int id, String nama, String usernameCreator, String kategori, String textBahan, String textLangkah, int status) {
+        this.id = id;
         this.nama = nama;
         this.usernameCreator = usernameCreator;
         this.kategori = kategori;
@@ -21,6 +23,7 @@ public class Recipe implements Parcelable {
     }
 
     protected Recipe(Parcel in) {
+        id = in.readInt();
         nama = in.readString();
         usernameCreator = in.readString();
         kategori = in.readString();
@@ -40,6 +43,14 @@ public class Recipe implements Parcelable {
             return new Recipe[size];
         }
     };
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getUsernameCreator() {
         return usernameCreator;
@@ -96,6 +107,7 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
         parcel.writeString(nama);
         parcel.writeString(usernameCreator);
         parcel.writeString(kategori);
