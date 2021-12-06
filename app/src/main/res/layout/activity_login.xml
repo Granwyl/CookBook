@@ -9,43 +9,75 @@
     android:orientation="vertical"
     tools:context=".Login">
 
-    <EditText
-        android:id="@+id/etLoginUsername"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Username"
-        android:inputType="textPersonName"
-        android:layout_margin="2dp"/>
+        android:layout_margin="25dp"
+        android:layout_weight="0"
+        android:gravity="center_horizontal|center_vertical">
 
-    <EditText
-        android:id="@+id/etLoginPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:layout_margin="2dp"/>
+        <ImageView
+            android:id="@+id/ivLogin"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:srcCompat="@drawable/logo" />
+    </RelativeLayout>
 
-    <Button
-        android:id="@+id/btnLogin"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="loginClick"
-        android:text="Login"
-        android:background="@drawable/custom_button"
-        android:textAllCaps="false"
-        android:layout_margin="5dp"
-        android:textSize="17dp"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnLoginRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="loginClick"
-        android:text="To Register"
-        android:background="@drawable/custom_button"
-        android:textAllCaps="false"
-        android:layout_margin="5dp"
-        android:textSize="17dp"/>
+        <EditText
+            android:id="@+id/etLoginUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="3dp"
+            android:ems="10"
+            android:hint="Username"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/etLoginPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="3dp"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/custom_button"
+            android:onClick="loginClick"
+            android:text="Login"
+            android:textAllCaps="false"
+            android:textSize="17dp" />
+
+        <Button
+            android:id="@+id/btnLoginRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/custom_button"
+            android:onClick="loginClick"
+            android:text="To Register"
+            android:textAllCaps="false"
+            android:textSize="17dp" />
+    </LinearLayout>
+
 </LinearLayout>
