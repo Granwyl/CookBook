@@ -57,14 +57,6 @@ public class MyRecipeActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.option_exit){
             Intent toHome = new Intent(MyRecipeActivity.this, MainActivity.class);
             startActivity(toHome);
-        }else if (item.getItemId() == R.id.option_add){
-            Intent toAdd = new Intent(MyRecipeActivity.this, AddRecipeActivity.class);
-            toAdd.putExtra("user", user);
-            startActivity(toAdd);
-        }else if (item.getItemId() == R.id.option_home){
-            Intent toHome = new Intent(MyRecipeActivity.this, MainActivity.class);
-            toHome.putExtra("user", user);
-            startActivity(toHome);
         }
         return super.onOptionsItemSelected(item);
     }

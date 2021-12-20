@@ -11,8 +11,9 @@ public class Recipe implements Parcelable {
     private String textBahan;
     private String textLangkah;
     private int status; // 0 not published, 1 published
+    private double rate;
 
-    public Recipe(int id, String nama, String usernameCreator, String kategori, String textBahan, String textLangkah, int status) {
+    public Recipe(int id, String nama, String usernameCreator, String kategori, String textBahan, String textLangkah, int status, double rate) {
         this.id = id;
         this.nama = nama;
         this.usernameCreator = usernameCreator;
@@ -20,6 +21,7 @@ public class Recipe implements Parcelable {
         this.textBahan = textBahan;
         this.textLangkah = textLangkah;
         this.status = status;
+        this.rate = rate;
     }
 
     protected Recipe(Parcel in) {
@@ -30,6 +32,7 @@ public class Recipe implements Parcelable {
         textBahan = in.readString();
         textLangkah = in.readString();
         status = in.readInt();
+        rate = in.readDouble();
     }
 
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
@@ -100,6 +103,14 @@ public class Recipe implements Parcelable {
         this.status = status;
     }
 
+    public double getRate() {
+        return rate;
+    }
+
+    public void setRate(double rate) {
+        this.rate = rate;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -114,5 +125,6 @@ public class Recipe implements Parcelable {
         parcel.writeString(textBahan);
         parcel.writeString(textLangkah);
         parcel.writeInt(status);
+        parcel.writeDouble(rate);
     }
 }

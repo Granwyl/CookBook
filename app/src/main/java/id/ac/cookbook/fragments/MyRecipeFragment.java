@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import id.ac.cookbook.AddRecipeActivity;
+import id.ac.cookbook.DetailActivity;
 import id.ac.cookbook.MainActivity;
 import id.ac.cookbook.R;
 import id.ac.cookbook.data.Recipe;
@@ -151,7 +152,8 @@ public class MyRecipeFragment extends Fragment {
                                         kategori,
                                         recipeObj.getString("ingredients"),
                                         recipeObj.getString("steps"),
-                                        recipeObj.getInt("status_publish")
+                                        recipeObj.getInt("status_publish"),
+                                        recipeObj.getDouble("rate")
                                 );
                                 listRecipe.add(recipe);
                             }
@@ -204,7 +206,11 @@ public class MyRecipeFragment extends Fragment {
         recipeAdapter.setOnItemClickCallback(new RecipeAdapter.OnItemClickCallback() {
             @Override
             public void onItemClicked(Recipe recipe) {
-                Toast.makeText(getActivity(), recipe.getNama(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), recipe.getNama(), Toast.LENGTH_SHORT).show();
+                Intent toDetail = new Intent(getActivity(), DetailActivity.class);
+                toDetail.putExtra("user", me);
+                toDetail.putExtra("recipe", recipe);
+                startActivity(toDetail);
             }
         });
         rvData.setAdapter(recipeAdapter);

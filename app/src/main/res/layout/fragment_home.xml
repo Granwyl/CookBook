@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="10dp"
     android:orientation="vertical"
     tools:context=".fragments.HomeFragment">
 
@@ -11,6 +12,21 @@
         android:id="@+id/tvFrHomeWelcome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp" />
+        android:textSize="25dp"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/spinnerFrHomeFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:entries="@array/filter" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFrHomeRecipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        tools:listitem="@layout/item_recipe" />
 
 </LinearLayout>

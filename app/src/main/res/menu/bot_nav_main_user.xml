@@ -12,4 +12,9 @@
         android:icon="@drawable/ic_my_recipe"
         android:title="My Recipe"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/bot_nav_user_myBookmark"
+        android:icon="@drawable/ic_bookmark_active"
+        android:title="My Bookmark"
+        app:showAsAction="always" />
 </menu>

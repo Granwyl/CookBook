@@ -3,17 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/option_home"
-        android:icon="@drawable/ic_home"
-        android:title="Home"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/option_add"
-        android:title="Add Recipe" />
-    <item
-        android:id="@+id/option_my_recipe"
-        android:title="My Recipe" />
-    <item
         android:id="@+id/option_exit"
-        android:title="Log Out" />
+        android:icon="@drawable/ic_logout"
+        android:title="Log Out"
+        app:showAsAction="always" />
 </menu>

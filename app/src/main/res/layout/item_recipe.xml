@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="10dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -13,16 +14,15 @@
 
         <ImageView
             android:id="@+id/ivItemRecipe"
-            android:layout_width="100dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
+            android:layout_weight="3"
             app:srcCompat="@drawable/ic_food" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="10"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -39,7 +39,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Username Creator"
-                android:textSize="10sp" />
+                android:textSize="12sp" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvItemRecipeRating"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textAlignment="textEnd" />
+
+        <ImageView
+            android:id="@+id/ivItemRecipeRate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_star_active" />
+
     </LinearLayout>
 </LinearLayout>

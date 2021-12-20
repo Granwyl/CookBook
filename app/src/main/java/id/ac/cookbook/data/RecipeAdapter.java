@@ -53,12 +53,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivLogo;
-        TextView tvNama, tvCreator;
+        TextView tvNama, tvCreator, tvRate;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivLogo = itemView.findViewById(R.id.ivItemRecipe);
             tvNama = itemView.findViewById(R.id.tvItemRecipeNama);
             tvCreator = itemView.findViewById(R.id.tvItemRecipeCreator);
+            tvRate = itemView.findViewById(R.id.tvItemRecipeRating);
         }
 
         void bind(Recipe recipe){
@@ -71,6 +72,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             }else if (recipe.getKategori().equalsIgnoreCase("side dish")){
                 ivLogo.setImageResource(R.drawable.ic_side_dish);
             }
+            tvRate.setText(String.format("%.2f", recipe.getRate()));
         }
     }
 
