@@ -14,6 +14,12 @@
         android:theme="@style/Theme.CookBook"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".RateActivity"
+            android:exported="true" />
+        <activity
+            android:name=".UpdateRecipeActivity"
+            android:exported="true" />
+        <activity
             android:name=".DetailActivity"
             android:exported="true" />
         <activity
@@ -42,7 +48,7 @@
             android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>

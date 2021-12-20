@@ -53,7 +53,7 @@ public class DetailActivity extends AppCompatActivity {
 
     TextView tvTitle, tvKategori, tvCreator, tvRate, tvBahan, tvStep;
     ImageButton btnBookmark;
-    Button btnPublish, btnRate, btnEdit;
+    Button btnPublish, btnRate, btnEdit, btnDelete;
     RecyclerView rvData;
     ProgressDialog progressDialog;
 
@@ -76,6 +76,7 @@ public class DetailActivity extends AppCompatActivity {
         btnPublish = findViewById(R.id.btnDetailPublish);
         btnRate = findViewById(R.id.btnDetailRate);
         btnEdit = findViewById(R.id.btnDetailEdit);
+        btnDelete = findViewById(R.id.btnDetailDelete);
         rvData = findViewById(R.id.rvDetailResponses);
 
         if (getIntent().hasExtra("user")){
@@ -96,6 +97,7 @@ public class DetailActivity extends AppCompatActivity {
                 if (me.getUsername().equalsIgnoreCase(recipe.getUsernameCreator())){
                     btnPublish.setVisibility(View.VISIBLE);
                     btnEdit.setVisibility(View.VISIBLE);
+                    btnDelete.setVisibility(View.VISIBLE);
                     btnRate.setVisibility(View.GONE);
                 }
                 getRates(recipe.getId()+"", me.getId()+"");
@@ -159,9 +161,68 @@ public class DetailActivity extends AppCompatActivity {
         }else if (v.getId() == R.id.btnDetailPublish){
             publishRecipe(recipe.getId()+"");
         }else if (v.getId() == R.id.btnDetailRate){
-            Toast.makeText(getApplicationContext(), "RATE!", Toast.LENGTH_SHORT).show();
+            Intent toRate = new Intent(DetailActivity.this, RateActivity.class);
+            toRate.putExtra("user", me);
+            toRate.putExtra("recipe", recipe);
+            startActivity(toRate);
         }else if (v.getId() == R.id.btnDetailEdit){
-            Toast.makeText(getApplicationContext(), "EDIT!", Toast.LENGTH_SHORT).show();
+            Intent toUpdate = new Intent(DetailActivity.this, UpdateRecipeActivity.class);
+            toUpdate.putExtra("user", me);
+            toUpdate.putExtra("recipe", recipe);
+            startActivity(toUpdate);
+        }else if (v.getId() == R.id.btnDetailDelete){
+            if (getIntent().hasExtra("user")){
+                deleteRecipe(recipe.getId()+"");
+            }
+        }
+    }
+
+    public void deleteRecipe(final String id_recipe){
+        if (checkNetworkConnection()){
+            progressDialog.show();
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, DbContract.SERVER_MASTER_URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        int code = jsonObject.getInt("code");
+                        String message = jsonObject.getString("message");
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        if (code == 1){
+                            Intent toHome = new Intent(DetailActivity.this, MainActivity.class);
+                            toHome.putExtra("user", me);
+                            startActivity(toHome);
+                        }
+                    }catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }) {
+                @Nullable
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("function", "deleteRecipe");
+                    params.put("id_recipe", id_recipe);
+                    return params;
+                }
+            };
+
+            VolleyConnection.getInstance(DetailActivity.this).addToRequestQueue(stringRequest);
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.cancel();
+                }
+            }, 1000);
+        }else{
+            Toast.makeText(getApplicationContext(), "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -190,8 +251,6 @@ public class DetailActivity extends AppCompatActivity {
                                 );
                                 listRate.add(rate);
                             }
-                        }else{ // login admin
-                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         }
                         setBtnBookmark();
                         setUpRecyclerView(listRate);

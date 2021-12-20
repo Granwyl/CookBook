@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import id.ac.cookbook.data.User;
+import id.ac.cookbook.fragments.BookmarkFragment;
 import id.ac.cookbook.fragments.HomeFragment;
 import id.ac.cookbook.fragments.LoginFragment;
 import id.ac.cookbook.fragments.MyRecipeFragment;
@@ -50,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case R.id.bot_nav_user_myRecipe:
                             fragment = MyRecipeFragment.newInstance(user);
+                            break;
+                        case R.id.bot_nav_user_myBookmark:
+                            fragment = BookmarkFragment.newInstance(user);
                             break;
                         default:
                             fragment = HomeFragment.newInstance(user);

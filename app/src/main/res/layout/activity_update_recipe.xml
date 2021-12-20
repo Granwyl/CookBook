@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    tools:context=".UpdateRecipeActivity">
+
+    <TextView
+        android:id="@+id/tvUpdateRecipeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Update Recipe"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etUpdateRecipeNama"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:ems="10"
+        android:hint="Nama Resep"
+        android:inputType="textPersonName" />
+
+    <Spinner
+        android:id="@+id/spinnerUpdateRecipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:entries="@array/kategori" />
+
+    <EditText
+        android:id="@+id/etUpdateRecipeBahan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Bahan Resep"
+        android:inputType="textMultiLine"
+        android:minLines="5" />
+
+    <EditText
+        android:id="@+id/etUpdateRecipeLangkah"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Langkah Resep"
+        android:inputType="textMultiLine"
+        android:minLines="5" />
+
+    <Button
+        android:id="@+id/btnUpdateRecipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="updateRecipeClick"
+        android:text="Update Recipe"
+        android:textAllCaps="false"
+        android:background="@drawable/custom_button"
+        android:textSize="17dp"
+        android:layout_margin="5dp"/>
+
+    <Button
+        android:id="@+id/btnUpdateRecipeBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="updateRecipeClick"
+        android:text="Back"
+        android:textAllCaps="false"
+        android:background="@drawable/custom_button"
+        android:textSize="17dp"
+        android:layout_margin="5dp"/>
+
+</LinearLayout>

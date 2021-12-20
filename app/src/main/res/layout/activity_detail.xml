@@ -155,6 +155,16 @@
             android:onClick="detailClick"
             android:text="Edit"
             android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnDetailDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:onClick="detailClick"
+            android:text="Delete"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

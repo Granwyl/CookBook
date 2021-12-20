@@ -20,18 +20,20 @@
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_login.xml" value="0.536" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_main.xml" value="0.16983695652173914" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_my_recipe.xml" value="0.1634963768115942" />
+        <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_rate.xml" value="0.25" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_register.xml" value="0.264" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_splash_screen.xml" value="0.25769927536231885" />
+        <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_update_recipe.xml" value="0.24270833333333333" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_user_home.xml" value="0.16983695652173914" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/fragment_bookmark.xml" value="0.25" />
-        <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/fragment_home.xml" value="0.4" />
+        <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/fragment_login.xml" value="0.536" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/fragment_my_recipe.xml" value="0.25769927536231885" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/item_recipe.xml" value="0.4" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/item_review.xml" value="0.4" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/menu/bot_nav_main_anonymous.xml" value="0.13229166666666667" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/menu/bot_nav_main_anonymus.xml" value="0.13229166666666667" />
-        <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/menu/bot_nav_main_user.xml" value="0.13229166666666667" />
+        <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/menu/bot_nav_main_user.xml" value="0.264" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/menu/option_anonymous.xml" value="0.2578125" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/menu/option_loginregister.xml" value="0.2578125" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/menu/option_user.xml" value="0.2" />

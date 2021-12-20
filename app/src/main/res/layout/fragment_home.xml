@@ -9,6 +9,14 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/tvFrHomeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Home"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/tvFrHomeWelcome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
