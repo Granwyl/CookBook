@@ -42,6 +42,12 @@
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.27395833333333336" />
         <entry key="..\:/MDP/CookBook/app/src/main/res/layout/activity_main.xml" value="0.15534420289855072" />
         <entry key="..\:/MDP/CookBook/app/src/main/res/layout/activity_register.xml" value="0.15534420289855072" />
+        <entry key="..\:/Users/User/Documents/GitHub/CookBook/app/src/main/res/layout/activity_add_recipe.xml" value="0.1" />
+        <entry key="..\:/Users/User/Documents/GitHub/CookBook/app/src/main/res/layout/activity_login.xml" value="0.22" />
+        <entry key="..\:/Users/User/Documents/GitHub/CookBook/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/User/Documents/GitHub/CookBook/app/src/main/res/layout/activity_user_home.xml" value="0.1" />
+        <entry key="..\:/Users/User/Documents/GitHub/CookBook/app/src/main/res/layout/fragment_home.xml" value="0.25" />
+        <entry key="..\:/Users/User/Documents/GitHub/CookBook/app/src/main/res/layout/fragment_login.xml" value="0.22" />
       </map>
     </option>
   </component>

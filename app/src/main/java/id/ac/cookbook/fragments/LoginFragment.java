@@ -32,7 +32,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import id.ac.cookbook.Login;
 import id.ac.cookbook.MainActivity;
 import id.ac.cookbook.R;
 import id.ac.cookbook.Register;

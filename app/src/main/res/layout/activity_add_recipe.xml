@@ -56,6 +56,25 @@
         android:inputType="textMultiLine"
         android:minLines="5" />
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gambar"
+        />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/gambar"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Browse Gambar"
+        android:id="@+id/btnBrowse"
+        />
     <Button
         android:id="@+id/btnAddRecipe"
         android:layout_width="match_parent"

@@ -1,33 +1,50 @@
 package id.ac.cookbook;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +52,9 @@ import id.ac.cookbook.data.Recipe;
 import id.ac.cookbook.data.User;
 import id.ac.cookbook.volley.DbContract;
 import id.ac.cookbook.volley.VolleyConnection;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class AddRecipeActivity extends AppCompatActivity {
     EditText etNama, etBahan, etLangkah;
@@ -43,7 +63,8 @@ public class AddRecipeActivity extends AppCompatActivity {
     Recipe recipe;
 
     ProgressDialog progressDialog;
-
+    ActivityResultLauncher<Intent> launcher;
+    int GALLERY_IMAGE_REQ_CODE=105;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +80,70 @@ public class AddRecipeActivity extends AppCompatActivity {
         if (getIntent().hasExtra("user")){
             user = getIntent().getParcelableExtra("user");
         }
+
+
+        Button btnBrowse=findViewById(R.id.btnBrowse);
+
+        btnBrowse.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                ImagePicker.with(AddRecipeActivity.this)
+                        // Crop Image(User can choose Aspect Ratio)
+                        .crop()
+                        // User can only select image from Gallery
+                        .galleryOnly()
+
+                        .galleryMimeTypes(new String[]{"image/png",
+                                "image/jpg",
+                                "image/jpeg"
+                        })
+                        // Image resolution will be less than 1080 x 1920
+                        .maxResultSize(1080, 1920)
+                        // .saveDir(getExternalFilesDir(null))
+                        .start(GALLERY_IMAGE_REQ_CODE);
+
+
+            //Intent intent=ImagePicker.Companion.with(AddRecipeActivity.this).createIntent();
+                //launcher.launch(intent);
+            }
+        });
+    }
+
+
+    Uri uri;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            // Uri object will not be null for RESULT_OK
+            uri = data.getData();
+
+            if (requestCode== GALLERY_IMAGE_REQ_CODE)
+            {
+                ImageView im=(ImageView) findViewById(R.id.gambar);
+
+                Picasso.get()
+                        .load(uri)
+                        .into(im);
+
+                    //mProfileUri = uri;
+                    //ImageViewExtensionKt.setLocalImage(imgProfile, uri, true);
+                    //break;
+
+            }
+        } else if (resultCode == ImagePicker.RESULT_ERROR) {
+            Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+    public void browse(View v)
+    {
+        //Intent intent = new Intent(this, SomeActivity.class);
+
     }
 
     @Override
@@ -111,34 +196,63 @@ public class AddRecipeActivity extends AppCompatActivity {
         doAddRecipeToServer(nama, ""+user.getId(), ""+idKategori, bahan, langkah);
     }
 
-    public void doAddRecipeToServer(final String title, final String idUser, final String idCategory, final String ingredients, final String steps){
-        if (checkNetworkConnection()){
-            progressDialog.show();
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, DbContract.SERVER_MASTER_URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        int code = jsonObject.getInt("code");
-                        String message = jsonObject.getString("message");
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                        if (code == 1){ // inserted
-                            clearInput();
-                        }
-                    }catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
+    private RequestQueue rQueue;
 
-                }
-            }) {
-                @Nullable
+    String upload_URL=DbContract.ADD_BARANG;
+
+    public byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
+    }
+
+    byte[] inputData;
+    public void doAddRecipeToServer(final String title, final String idUser, final String idCategory, final String ingredients, final String steps){
+        if (checkNetworkConnection()) {
+            progressDialog.show();
+
+            //File file = new File(uri.getPath());
+            //RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+            // MultipartBody.Part is used to send also the actual filename
+            //MultipartBody.Part body = MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
+
+            try {
+                InputStream iStream =   getContentResolver().openInputStream(uri);
+                inputData = getBytes(iStream);
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+                System.out.println("err");
+
+            }
+
+            VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, upload_URL,
+                    new Response.Listener<NetworkResponse>() {
+                        @Override
+                        public void onResponse(NetworkResponse response) {
+                            System.out.println(response.data.toString());
+                            System.out.println("aa");
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            System.out.println(error.getMessage());
+                            System.out.println("bb");
+                            //Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }) {
+
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
+
                     params.put("function", "addRecipe");
                     params.put("title", title);
                     params.put("id_user", idUser);
@@ -147,19 +261,34 @@ public class AddRecipeActivity extends AppCompatActivity {
                     params.put("steps", steps);
                     return params;
                 }
+
+                @Override
+                protected Map<String, DataPart> getByteData() {
+                    Map<String, DataPart> params = new HashMap<>();
+                    File fr=new File(uri.getPath());
+                    String name=fr.getName();
+                    params.put("filename", new DataPart(name ,inputData));
+
+                    return params;
+                }
             };
 
-            VolleyConnection.getInstance(AddRecipeActivity.this).addToRequestQueue(stringRequest);
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    progressDialog.cancel();
-                }
-            }, 2000);
-        }else{
-            Toast.makeText(getApplicationContext(), "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+            volleyMultipartRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    0,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            rQueue = Volley.newRequestQueue(AddRecipeActivity.this);
+            rQueue.add(volleyMultipartRequest);
+
+
+
         }
+
+
+
+
+
     }
 
     public boolean checkNetworkConnection(){

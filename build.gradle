@@ -14,9 +14,7 @@ buildscript {
 }
 
 allprojects {
-    repositories {
 
-    }
 }
 
 task clean(type: Delete) {
