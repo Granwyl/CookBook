@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,9 +28,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import id.ac.cookbook.data.AppDatabaseLogged;
+import id.ac.cookbook.data.Logged;
 import id.ac.cookbook.data.User;
 import id.ac.cookbook.volley.DbContract;
 import id.ac.cookbook.volley.VolleyConnection;
@@ -116,9 +122,23 @@ public class Login extends AppCompatActivity {
                                         userObj.getString("email")
                                 );
                             }
-                            Intent toHome = new Intent(Login.this, MainActivity.class);
-                            toHome.putExtra("user", user);
-                            startActivity(toHome);
+                            Logged logged = new Logged(user.getId());
+                            new AddLoggedAsync(logged,
+                                    getApplicationContext(),
+                                    new AddLoggedAsync.AddLoggedCallback() {
+                                @Override
+                                public void preExecute() {
+
+                                }
+
+                                @Override
+                                public void postExecute(String message) {
+//                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                    Intent toHome = new Intent(Login.this, MainActivity.class);
+                                    toHome.putExtra("user", user);
+                                    startActivity(toHome);
+                                }
+                            }).execute();
                         }else if (code == 2){ // login admin
 
                         }
@@ -160,5 +180,42 @@ public class Login extends AppCompatActivity {
         ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
+    }
+}
+
+class AddLoggedAsync{
+    private final WeakReference<Context> weakContext;
+    private final WeakReference<AddLoggedCallback> weakCallback;
+    private Logged logged;
+
+    public AddLoggedAsync(Logged logged,
+                          Context context,
+                          AddLoggedCallback callback){
+        this.logged = logged;
+        this.weakContext = new WeakReference<>(context);
+        this.weakCallback = new WeakReference<>(callback);
+    }
+
+    void execute(){
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        weakCallback.get().preExecute();
+        executorService.execute(() -> {
+            Context context = weakContext.get();
+            AppDatabaseLogged appDatabaseLogged = AppDatabaseLogged.getAppDatabase(context);
+
+            appDatabaseLogged.loggedDao().insertLogged(logged);
+
+            handler.post(() -> {
+                String successMsg = "Logged Inserted";
+                weakCallback.get().postExecute(successMsg);
+            });
+        });
+    }
+
+    interface AddLoggedCallback{
+        void preExecute();
+        void postExecute(String message);
     }
 }

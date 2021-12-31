@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +30,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import id.ac.cookbook.MainActivity;
 import id.ac.cookbook.R;
 import id.ac.cookbook.Register;
+import id.ac.cookbook.data.AppDatabaseLogged;
+import id.ac.cookbook.data.Logged;
 import id.ac.cookbook.data.User;
 import id.ac.cookbook.volley.DbContract;
 import id.ac.cookbook.volley.VolleyConnection;
@@ -160,9 +166,23 @@ public class LoginFragment extends Fragment {
                                         userObj.getString("email")
                                 );
                             }
-                            Intent toHome = new Intent(getActivity(), MainActivity.class);
-                            toHome.putExtra("user", user);
-                            startActivity(toHome);
+                            Logged logged = new Logged(user.getId());
+                            new AddLoggedAsync2(logged,
+                                    getActivity(),
+                                    new AddLoggedAsync2.AddLoggedCallback2() {
+                                @Override
+                                public void preExecute() {
+
+                                }
+
+                                @Override
+                                public void postExecute(String message) {
+//                                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                                    Intent toHome = new Intent(getActivity(), MainActivity.class);
+                                    toHome.putExtra("user", user);
+                                    startActivity(toHome);
+                                }
+                            }).execute();
                         }else if (code == 2){ // login admin
 
                         }
@@ -204,5 +224,42 @@ public class LoginFragment extends Fragment {
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
+    }
+}
+
+class AddLoggedAsync2{
+    private final WeakReference<Context> weakContext;
+    private final WeakReference<AddLoggedCallback2> weakCallback;
+    private Logged logged;
+
+    public AddLoggedAsync2(Logged logged,
+                          Context context,
+                          AddLoggedAsync2.AddLoggedCallback2 callback){
+        this.logged = logged;
+        this.weakContext = new WeakReference<>(context);
+        this.weakCallback = new WeakReference<>(callback);
+    }
+
+    void execute(){
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        weakCallback.get().preExecute();
+        executorService.execute(() -> {
+            Context context = weakContext.get();
+            AppDatabaseLogged appDatabaseLogged = AppDatabaseLogged.getAppDatabase(context);
+
+            appDatabaseLogged.loggedDao().insertLogged(logged);
+
+            handler.post(() -> {
+                String successMsg = "Logged Inserted";
+                weakCallback.get().postExecute(successMsg);
+            });
+        });
+    }
+
+    interface AddLoggedCallback2{
+        void preExecute();
+        void postExecute(String message);
     }
 }

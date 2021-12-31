@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void postExecute(String message) {
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         Intent toHome = new Intent(MainActivity.this, MainActivity.class);
                         startActivity(toHome);
                         finish();
