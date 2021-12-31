@@ -32,6 +32,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -236,8 +237,21 @@ public class AddRecipeActivity extends AppCompatActivity {
                     new Response.Listener<NetworkResponse>() {
                         @Override
                         public void onResponse(NetworkResponse response) {
-                            System.out.println(response.data.toString());
-                            System.out.println("aa");
+                            //System.out.println(response.data.toString());
+                            //String hasil=response.data.toString();
+                            try {
+
+                                String json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                                System.out.println("Hasil "+json);
+                                System.out.println("aa");
+
+                                progressDialog.dismiss();
+                                AddRecipeActivity.this.finish();
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
                         }
                     },
                     new Response.ErrorListener() {

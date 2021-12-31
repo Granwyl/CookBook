@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,7 +60,7 @@ public class DetailActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
 
     boolean bookmark, adaUser;
-
+    ImageView gbr;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +81,8 @@ public class DetailActivity extends AppCompatActivity {
         btnDelete = findViewById(R.id.btnDetailDelete);
         rvData = findViewById(R.id.rvDetailResponses);
 
+        gbr=findViewById(R.id.gbr);
+
         if (getIntent().hasExtra("user")){
             me = getIntent().getParcelableExtra("user");
             adaUser = true;
@@ -90,6 +94,39 @@ public class DetailActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra("recipe")){
             recipe = getIntent().getParcelableExtra("recipe");
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, DbContract.DETAIL_BARANG+"?id="+recipe.getId(), new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        String url=DbContract.DETAIL_GAMBR+jsonObject.getString("gambar");
+                        Picasso.get()
+                                .load(url)
+                                .into(gbr);
+
+                    }catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }) {
+                @Nullable
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("id", recipe.getId()+"");
+                    return params;
+                }
+            };
+
+            VolleyConnection.getInstance(DetailActivity.this).addToRequestQueue(stringRequest);
+
+
             setComponents();
 
             //LOAD REVIEW
