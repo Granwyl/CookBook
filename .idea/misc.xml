@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/activity_my_recipe.xml" value="0.2418478260869565" />
         <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/fragment_home.xml" value="0.2418478260869565" />
+        <entry key="..\:/Documents/GitHub/CookBook/app/src/main/res/layout/fragment_my_recipe.xml" value="0.2418478260869565" />
         <entry key="..\:/MDP/CookBook/app/src/main/res/layout/activity_add_recipe.xml" value="0.14375" />
         <entry key="..\:/MDP/CookBook/app/src/main/res/layout/activity_detail.xml" value="0.13333333333333333" />
         <entry key="..\:/MDP/CookBook/app/src/main/res/layout/activity_login.xml" value="0.14375" />
