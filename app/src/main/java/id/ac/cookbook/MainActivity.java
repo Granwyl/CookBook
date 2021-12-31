@@ -7,18 +7,27 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.lang.ref.WeakReference;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import id.ac.cookbook.data.AppDatabaseLogged;
 import id.ac.cookbook.data.User;
 import id.ac.cookbook.fragments.BookmarkFragment;
 import id.ac.cookbook.fragments.HomeFragment;
@@ -132,15 +141,58 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (getIntent().hasExtra("user")){
             if (item.getItemId() == R.id.option_exit){
-                Intent toHome = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(toHome);
+                new ClearLoggedAsync(this, new ClearLoggedAsync.ClearLoggedCallback() {
+                    @Override
+                    public void preExecute() {
+
+                    }
+
+                    @Override
+                    public void postExecute(String message) {
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        Intent toHome = new Intent(MainActivity.this, MainActivity.class);
+                        startActivity(toHome);
+                        finish();
+                    }
+                }).execute();
             }
-        }else{
-//            if (item.getItemId() == R.id.option_login){
-//                Intent toLogin = new Intent(MainActivity.this, Login.class);
-//                startActivity(toLogin);
-//            }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+}
+
+class ClearLoggedAsync{
+    private final WeakReference<Context> weakContext;
+    private final WeakReference<ClearLoggedCallback> weakCallback;
+
+    public ClearLoggedAsync(Context context,
+                            ClearLoggedCallback callback){
+        this.weakContext = new WeakReference<>(context);
+        this.weakCallback = new WeakReference<>(callback);
+    }
+
+    void execute(){
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        weakCallback.get().preExecute();
+        executorService.execute(() -> {
+            Context context = weakContext.get();
+            AppDatabaseLogged appDatabaseLogged = AppDatabaseLogged.getAppDatabase(context);
+
+            appDatabaseLogged.loggedDao().clearLogged();
+
+            handler.post(() -> {
+                String successMsg = "Logged Cleared";
+                weakCallback.get().postExecute(successMsg);
+            });
+        });
+    }
+
+    interface ClearLoggedCallback{
+        void preExecute();
+        void postExecute(String message);
     }
 }

@@ -230,7 +230,8 @@ public class AddRecipeActivity extends AppCompatActivity {
             catch (Exception ex) {
                 ex.printStackTrace();
                 System.out.println("err");
-
+                Toast.makeText(getApplicationContext(), "Insert image please..", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
 
             VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, upload_URL,
@@ -246,7 +247,7 @@ public class AddRecipeActivity extends AppCompatActivity {
                                 System.out.println("aa");
 
                                 progressDialog.dismiss();
-                                AddRecipeActivity.this.finish();
+//                                AddRecipeActivity.this.finish();
                                 Intent toHome = new Intent(AddRecipeActivity.this, MainActivity.class);
                                 toHome.putExtra("user", user);
                                 toHome.putExtra("fragment", "myrecipe");
@@ -254,7 +255,8 @@ public class AddRecipeActivity extends AppCompatActivity {
                             }
                             catch (Exception ex)
                             {
-
+                                Toast.makeText(getApplicationContext(), "Insert image please..", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
                         }
                     },
@@ -263,6 +265,8 @@ public class AddRecipeActivity extends AppCompatActivity {
                         public void onErrorResponse(VolleyError error) {
                             System.out.println(error.getMessage());
                             System.out.println("bb");
+                            Toast.makeText(getApplicationContext(), "Insert image please..", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                             //Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }) {
