@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,8 +64,10 @@ public class HomeFragment extends Fragment {
     Spinner spinnerFilter;
     RecyclerView rvData;
     ProgressDialog progressDialog;
+    SearchView searchView;
 
     ArrayList<Recipe> listRecipe;
+    ArrayList<Recipe> keywordListRecipe;
     RecipeAdapter recipeAdapter;
 
     boolean adaUser = false;
@@ -124,6 +127,7 @@ public class HomeFragment extends Fragment {
         spinnerFilter = view.findViewById(R.id.spinnerFrHomeFilter);
         rvData = view.findViewById(R.id.rvFrHomeRecipe);
         progressDialog = new ProgressDialog(getActivity());
+        searchView = view.findViewById(R.id.svFrHome);
 
         if (adaUser){
             tvWelcome.setText("Hallo, " + me.getUsername());
@@ -133,6 +137,25 @@ public class HomeFragment extends Fragment {
 
         listRecipe = new ArrayList<>();
         setUpRecyclerView(listRecipe);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                keywordListRecipe = new ArrayList<>();
+                for (int i = 0; i < listRecipe.size(); i++) {
+                    if (listRecipe.get(i).getNama().toLowerCase().contains(s.toLowerCase())){
+                        keywordListRecipe.add(listRecipe.get(i));
+                    }
+                }
+                setUpRecyclerView(keywordListRecipe);
+                return true;
+            }
+        });
 
         spinnerFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -151,6 +174,17 @@ public class HomeFragment extends Fragment {
         });
 
         spinnerFilter.setSelection(0);
+    }
+
+    public void resetSearchView(ArrayList<Recipe> arrRecipe){
+        //reset searchview
+        String currentSearch = searchView.getQuery().toString();
+        if (currentSearch.length() > 0){
+            searchView.setQuery("", true);
+            searchView.setQuery(currentSearch, true);
+        }else{
+            setUpRecyclerView(arrRecipe);
+        }
     }
 
     public void getPublishedRecipe(){
@@ -192,7 +226,8 @@ public class HomeFragment extends Fragment {
                                 listRecipe.add(recipe);
                             }
                         }
-                        setUpRecyclerView(listRecipe);
+//                        setUpRecyclerView(listRecipe);
+                        resetSearchView(listRecipe);
                     }catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -264,7 +299,8 @@ public class HomeFragment extends Fragment {
                                 listRecipe.add(recipe);
                             }
                         }
-                        setUpRecyclerView(listRecipe);
+//                        setUpRecyclerView(listRecipe);
+                        resetSearchView(listRecipe);
                     }catch (JSONException e) {
                         e.printStackTrace();
                     }

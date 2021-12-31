@@ -227,6 +227,7 @@ public class DetailActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         if (code == 1){
                             Intent toHome = new Intent(DetailActivity.this, MainActivity.class);
+                            toHome.putExtra("fragment", "myrecipe");
                             toHome.putExtra("user", me);
                             startActivity(toHome);
                         }
