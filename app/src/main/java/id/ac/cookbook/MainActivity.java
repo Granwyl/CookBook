@@ -91,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState == null){
-            if (getIntent().hasExtra("user")){
+            if (getIntent().hasExtra("fragment")){
+                botNav.setSelectedItemId(R.id.bot_nav_user_myRecipe);
+            }else if (getIntent().hasExtra("user")){
                 botNav.setSelectedItemId(R.id.bot_nav_user_home);
             }else{
                 botNav.setSelectedItemId(R.id.bot_nav_main_home);

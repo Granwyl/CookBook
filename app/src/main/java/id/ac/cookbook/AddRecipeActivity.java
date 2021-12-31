@@ -247,6 +247,10 @@ public class AddRecipeActivity extends AppCompatActivity {
 
                                 progressDialog.dismiss();
                                 AddRecipeActivity.this.finish();
+                                Intent toHome = new Intent(AddRecipeActivity.this, MainActivity.class);
+                                toHome.putExtra("user", user);
+                                toHome.putExtra("fragment", "myrecipe");
+                                startActivity(toHome);
                             }
                             catch (Exception ex)
                             {
